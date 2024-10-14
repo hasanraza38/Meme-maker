@@ -6,6 +6,7 @@ interface memes {
   id: string;
   url: string;
   name: string;
+  box_count : number
 }
 const page = async () => {
   const data = await fetch("https://api.imgflip.com/get_memes");
@@ -22,19 +23,30 @@ const page = async () => {
           {res.data.memes.map((item: memes) => {
             return (
               <>
-                <div className="flex justify-center items-center flex-col card bg-zinc-800 shadow-zinc-600 shadow-lg p-8">
+                <div 
+                    key={item.id}
+                className=" transition-all flex justify-center items-center flex-col card bg-zinc-800 shadow-zinc-600 shadow-lg p-8 hover:bg-zinc-900 ">
                   <h2 className="card-title mb-5">{item.name}</h2>
                   <figure>
-                    <Link href={"creatememe"}>
-                      <Image
-                        key={item.id}
-                        src={item.url}
-                        width={200}
-                        height={300}
-                        alt="meme template"
+                    <Image
+                      src={item.url}
+                      width={200}
+                      height={300}
+                      alt="meme template"
                       />
+                      </figure>
+                    <Link href={{
+                      pathname: 'creatememe',
+                      query : {
+                        url : item.url,
+                        id : item.id,
+                        textField : item.box_count
+                        
+                      }
+                     
+                    }}>
+                      <button className="mt-3 btn btn-sm hover:bg-zinc-800" >Genrate Meme</button>
                     </Link>
-                  </figure>
                 </div>
               </>
             );
